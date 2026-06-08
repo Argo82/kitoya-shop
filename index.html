@@ -10,258 +10,122 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <style>
   :root {
-    --brown: #4A3525;
-    --brown-light: #7A6050;
-    --brown-pale: #C4A882;
-    --cream: #FDFBF7;
-    --cream-dark: #F5F0E8;
-    --cream-border: #E8DFD0;
-    --text: #2C1F12;
-    --text-muted: #9A8878;
-    --red: #C0392B;
-    --green: #5D8A6A;
-    --font-jp: 'Shippori Mincho', serif;
-    --font-body: 'Noto Sans TC', sans-serif;
+    --brown: #4A3525; --brown-light: #7A6050; --brown-pale: #C4A882;
+    --cream: #FDFBF7; --cream-dark: #F5F0E8; --cream-border: #E8DFD0;
+    --text: #2C1F12; --text-muted: #9A8878; --red: #C0392B; --green: #5D8A6A;
+    --font-jp: 'Shippori Mincho', serif; --font-body: 'Noto Sans TC', sans-serif;
     --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
-    --shadow: 0 2px 20px rgba(74,53,37,0.08);
-    --shadow-hover: 0 8px 40px rgba(74,53,37,0.15);
+    --shadow: 0 2px 20px rgba(74,53,37,0.08); --shadow-hover: 0 8px 40px rgba(74,53,37,0.15);
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--cream); color: var(--text); font-size: 15px; line-height: 1.7; min-height: 100vh; }
+  .page { display: none; } .page.active { display: block; }
 
-  body {
-    font-family: var(--font-body);
-    background: var(--cream);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
-
-  /* ── PAGES ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── HEADER ── */
   header {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(253,251,247,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--cream-border);
-    padding: 0 5vw;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
+    background: rgba(253,251,247,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cream-border); padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between; height: 64px;
   }
-  .logo {
-    font-family: var(--font-jp);
-    font-size: 1.5rem;
-    color: var(--brown);
-    letter-spacing: 0.12em;
-    cursor: pointer;
-    text-decoration: none;
-  }
+  .logo { font-family: var(--font-jp); font-size: 1.5rem; color: var(--brown); letter-spacing: 0.12em; cursor: pointer; text-decoration: none; }
   .logo span { font-size: 0.7rem; display: block; letter-spacing: 0.3em; color: var(--text-muted); font-family: var(--font-body); font-weight: 300; }
   nav { display: flex; gap: 2rem; align-items: center; }
-  nav a {
-    font-size: 0.82rem; letter-spacing: 0.15em; color: var(--text-muted);
-    text-decoration: none; transition: color var(--transition); cursor: pointer;
-  }
+  nav a { font-size: 0.82rem; letter-spacing: 0.15em; color: var(--text-muted); text-decoration: none; transition: color var(--transition); cursor: pointer; }
   nav a:hover { color: var(--brown); }
-  .cart-btn {
-    display: flex; align-items: center; gap: 0.5rem;
-    background: var(--brown); color: var(--cream);
-    border: none; padding: 0.5rem 1.2rem; cursor: pointer;
-    font-family: var(--font-body); font-size: 0.82rem;
-    letter-spacing: 0.1em; transition: background var(--transition);
-    position: relative;
-  }
+  .cart-btn { display: flex; align-items: center; gap: 0.5rem; background: var(--brown); color: var(--cream); border: none; padding: 0.5rem 1.2rem; cursor: pointer; font-family: var(--font-body); font-size: 0.82rem; letter-spacing: 0.1em; transition: background var(--transition); }
   .cart-btn:hover { background: var(--brown-light); }
-  .cart-count {
-    background: var(--brown-pale); color: var(--cream);
-    border-radius: 50%; width: 18px; height: 18px;
-    font-size: 0.7rem; display: flex; align-items: center; justify-content: center;
-    font-weight: 500;
-  }
 
-  /* ── HERO ── */
-  .hero {
-    padding: 8rem 5vw 6rem;
-    max-width: 900px;
-  }
-  .hero-label {
-    font-size: 0.72rem; letter-spacing: 0.4em; color: var(--text-muted);
-    text-transform: uppercase; margin-bottom: 1.5rem;
-  }
-  .hero h1 {
-    font-family: var(--font-jp);
-    font-size: clamp(2.2rem, 5vw, 4rem);
-    color: var(--brown); line-height: 1.3;
-    margin-bottom: 1.5rem; font-weight: 500;
-  }
+  .hero { padding: 8rem 5vw 6rem; max-width: 900px; }
+  .hero-label { font-size: 0.72rem; letter-spacing: 0.4em; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: var(--font-jp); font-size: clamp(2.2rem, 5vw, 4rem); color: var(--brown); line-height: 1.3; margin-bottom: 1.5rem; font-weight: 500; }
   .hero p { color: var(--text-muted); font-weight: 300; max-width: 480px; font-size: 0.95rem; }
 
-  /* ── DIVIDER ── */
-  .divider {
-    display: flex; align-items: center; gap: 1.5rem;
-    padding: 0 5vw; margin-bottom: 3rem;
-  }
+  .notice-bar { margin: 0 5vw 2rem; padding: 1rem 1.4rem; background: var(--cream-dark); border-left: 3px solid var(--brown); font-size: 0.85rem; color: var(--text-muted); }
+  .notice-bar strong { color: var(--brown); }
+
+  .divider { display: flex; align-items: center; gap: 1.5rem; padding: 0 5vw; margin-bottom: 3rem; }
   .divider span { font-size: 0.72rem; letter-spacing: 0.4em; color: var(--text-muted); white-space: nowrap; }
   .divider::before, .divider::after { content:''; flex:1; height:1px; background: var(--cream-border); }
 
-  /* ── PRODUCTS GRID ── */
   .products-section { padding: 0 5vw 8rem; }
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2rem;
-  }
-  .product-card {
-    background: #fff;
-    border: 1px solid var(--cream-border);
-    cursor: pointer;
-    transition: box-shadow var(--transition), transform var(--transition);
-    overflow: hidden;
-  }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
+  .product-card { background: #fff; border: 1px solid var(--cream-border); cursor: pointer; transition: box-shadow var(--transition), transform var(--transition); overflow: hidden; }
   .product-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
-  .product-img-wrap {
-    width: 100%; aspect-ratio: 1/1; overflow: hidden;
-    background: var(--cream-dark);
-    position: relative;
-  }
-  .product-img-wrap img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.5s ease;
-    display: block;
-  }
+  .product-img-wrap { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: var(--cream-dark); }
+  .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
   .product-card:hover .product-img-wrap img { transform: scale(1.04); }
-  .product-img-placeholder {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--cream-border); font-size: 2.5rem;
-  }
+  .product-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--cream-border); font-size:2.5rem; }
   .product-info { padding: 1.2rem 1.4rem 1.4rem; }
   .product-name { font-family: var(--font-jp); font-size: 1.05rem; color: var(--brown); margin-bottom: 0.3rem; }
   .product-desc { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; margin-bottom: 0.8rem; line-height: 1.5; min-height: 2.4em; }
-  .product-price { font-size: 0.9rem; color: var(--brown-light); letter-spacing: 0.05em; }
+  .product-price { font-size: 0.9rem; color: var(--brown-light); }
   .product-price em { font-style: normal; font-size: 1.15rem; font-weight: 500; color: var(--brown); }
 
-  /* ── LOADING / EMPTY ── */
   .loading-wrap { padding: 6rem 5vw; text-align: center; color: var(--text-muted); }
   .loading-dots span { animation: blink 1.2s infinite; display: inline-block; }
   .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
   .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(44,31,18,0.4); backdrop-filter: blur(4px);
-    display: flex; align-items: flex-end; justify-content: center;
-    opacity: 0; pointer-events: none; transition: opacity var(--transition);
-  }
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(44,31,18,0.4); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
   .modal-overlay.open { opacity: 1; pointer-events: all; }
-  @media(min-width:640px) {
-    .modal-overlay { align-items: center; }
-  }
-  .modal {
-    background: var(--cream); width: 100%; max-width: 560px;
-    max-height: 92vh; overflow-y: auto;
-    transform: translateY(40px); transition: transform var(--transition);
-    border-top: 3px solid var(--brown);
-  }
+  @media(min-width:640px) { .modal-overlay { align-items: center; } }
+  .modal { background: var(--cream); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; transform: translateY(40px); transition: transform var(--transition); border-top: 3px solid var(--brown); }
   .modal-overlay.open .modal { transform: translateY(0); }
-  @media(min-width:640px) {
-    .modal { border-top: none; border-left: 3px solid var(--brown); max-height: 85vh; }
-  }
-  .modal-header {
-    padding: 1.8rem 2rem 1.2rem;
-    border-bottom: 1px solid var(--cream-border);
-    display: flex; justify-content: space-between; align-items: flex-start;
-  }
+  @media(min-width:640px) { .modal { border-top: none; border-left: 3px solid var(--brown); max-height: 85vh; } }
+  .modal-header { padding: 1.8rem 2rem 1.2rem; border-bottom: 1px solid var(--cream-border); display: flex; justify-content: space-between; align-items: flex-start; }
   .modal-title { font-family: var(--font-jp); font-size: 1.3rem; color: var(--brown); }
-  .modal-price { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem; }
-  .modal-close {
-    background: none; border: none; cursor: pointer;
-    color: var(--text-muted); font-size: 1.3rem; padding: 0.2rem;
-    transition: color var(--transition);
-  }
+  .modal-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.3rem; padding: 0.2rem; transition: color var(--transition); }
   .modal-close:hover { color: var(--brown); }
   .modal-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
   .modal-img-placeholder { width:100%; aspect-ratio:16/9; background:var(--cream-dark); display:flex; align-items:center; justify-content:center; color:var(--cream-border); font-size:3rem; }
   .modal-body { padding: 1.5rem 2rem 2rem; }
 
-  /* ── OPTION GROUP ── */
   .option-group { margin-bottom: 1.4rem; }
-  .option-label {
-    font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-muted);
-    margin-bottom: 0.6rem; display: block;
-  }
+  .option-label { font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 0.6rem; display: block; }
   .option-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .option-chip {
-    border: 1px solid var(--cream-border); background: #fff;
-    padding: 0.4rem 1rem; font-size: 0.82rem; cursor: pointer;
-    transition: all var(--transition); color: var(--text);
-    font-family: var(--font-body);
-  }
+  .option-chip { border: 1px solid var(--cream-border); background: #fff; padding: 0.4rem 1rem; font-size: 0.82rem; cursor: pointer; transition: all var(--transition); color: var(--text); font-family: var(--font-body); }
   .option-chip:hover { border-color: var(--brown-pale); }
   .option-chip.selected { border-color: var(--brown); background: var(--brown); color: var(--cream); }
   .option-chip .chip-price { font-size: 0.72rem; opacity: 0.8; margin-left: 0.3rem; }
 
-  /* qty */
+  /* 口味卡片（帶圖片） */
+  .flavor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
+  .flavor-card { border: 1px solid var(--cream-border); background: #fff; cursor: pointer; transition: all var(--transition); overflow: hidden; }
+  .flavor-card:hover { border-color: var(--brown-pale); }
+  .flavor-card.selected { border-color: var(--brown); border-width: 2px; }
+  .flavor-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+  .flavor-card-label { font-size: 0.78rem; padding: 0.5rem 0.6rem; color: var(--text); line-height: 1.3; }
+  .flavor-card.selected .flavor-card-label { color: var(--brown); font-weight: 500; }
+
   .qty-wrap { display: flex; align-items: center; gap: 1rem; }
-  .qty-btn {
-    width: 32px; height: 32px; border: 1px solid var(--cream-border);
-    background: #fff; cursor: pointer; font-size: 1.1rem; color: var(--brown);
-    display: flex; align-items: center; justify-content: center;
-    transition: all var(--transition);
-  }
+  .qty-btn { width: 32px; height: 32px; border: 1px solid var(--cream-border); background: #fff; cursor: pointer; font-size: 1.1rem; color: var(--brown); display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
   .qty-btn:hover { border-color: var(--brown); }
   .qty-num { font-size: 1rem; min-width: 24px; text-align: center; }
 
-  /* add-on */
-  .addon-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0.7rem 0; border-bottom: 1px solid var(--cream-border);
-    cursor: pointer;
-  }
+  .addon-item { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid var(--cream-border); cursor: pointer; }
   .addon-item:last-child { border-bottom: none; }
   .addon-check { width: 18px; height: 18px; border: 1px solid var(--cream-border); display:flex; align-items:center; justify-content:center; transition: all var(--transition); flex-shrink:0; }
   .addon-item.selected .addon-check { background: var(--brown); border-color: var(--brown); color: var(--cream); }
   .addon-name { font-size: 0.88rem; margin-left: 0.7rem; flex:1; }
   .addon-price { font-size: 0.82rem; color: var(--text-muted); }
 
-  .modal-footer {
-    padding: 1.2rem 2rem;
-    border-top: 1px solid var(--cream-border);
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  }
+  .modal-footer { padding: 1.2rem 2rem; border-top: 1px solid var(--cream-border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .modal-total { font-size: 0.85rem; color: var(--text-muted); }
   .modal-total strong { font-size: 1.2rem; color: var(--brown); display: block; }
-  .btn-primary {
-    background: var(--brown); color: var(--cream);
-    border: none; padding: 0.8rem 2rem; cursor: pointer;
-    font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.1em;
-    transition: background var(--transition); white-space: nowrap;
-  }
+
+  .btn-primary { background: var(--brown); color: var(--cream); border: none; padding: 0.8rem 2rem; cursor: pointer; font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.1em; transition: background var(--transition); white-space: nowrap; }
   .btn-primary:hover { background: var(--brown-light); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-outline {
-    background: transparent; color: var(--brown);
-    border: 1px solid var(--brown); padding: 0.7rem 1.5rem; cursor: pointer;
-    font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.1em;
-    transition: all var(--transition);
-  }
+  .btn-outline { background: transparent; color: var(--brown); border: 1px solid var(--brown); padding: 0.7rem 1.5rem; cursor: pointer; font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.1em; transition: all var(--transition); }
   .btn-outline:hover { background: var(--brown); color: var(--cream); }
 
-  /* ── CART PAGE ── */
+  /* CART */
   .cart-page { padding: 3rem 5vw 6rem; max-width: 720px; margin: 0 auto; }
   .page-title { font-family: var(--font-jp); font-size: 1.6rem; color: var(--brown); margin-bottom: 0.5rem; }
   .page-subtitle { font-size: 0.82rem; color: var(--text-muted); letter-spacing: 0.15em; margin-bottom: 2.5rem; }
-  .cart-item {
-    display: flex; gap: 1rem; padding: 1.2rem 0;
-    border-bottom: 1px solid var(--cream-border);
-    align-items: flex-start;
-  }
+  .cart-item { display: flex; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--cream-border); align-items: flex-start; }
   .cart-item-img { width: 72px; height: 72px; object-fit: cover; flex-shrink:0; background: var(--cream-dark); }
   .cart-item-info { flex:1; }
   .cart-item-name { font-family: var(--font-jp); font-size: 0.95rem; color: var(--brown); margin-bottom: 0.2rem; }
@@ -269,119 +133,101 @@
   .cart-item-price { font-size: 0.9rem; color: var(--brown); font-weight: 500; white-space: nowrap; }
   .cart-item-remove { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem; padding:0.2rem; transition: color var(--transition); }
   .cart-item-remove:hover { color: var(--red); }
-  .cart-summary {
-    margin-top: 2rem; padding: 1.5rem;
-    background: var(--cream-dark); border: 1px solid var(--cream-border);
-  }
+  .cart-summary { margin-top: 2rem; padding: 1.5rem; background: var(--cream-dark); border: 1px solid var(--cream-border); }
   .summary-row { display:flex; justify-content:space-between; font-size:0.88rem; margin-bottom:0.6rem; }
   .summary-row.total { font-size:1.05rem; font-weight:500; color:var(--brown); border-top:1px solid var(--cream-border); padding-top:0.8rem; margin-top:0.8rem; }
 
-  /* ── CHECKOUT FORM ── */
+  /* CHECKOUT */
   .checkout-form { margin-top: 2.5rem; }
   .form-section-title { font-size: 0.72rem; letter-spacing: 0.3em; color: var(--text-muted); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--cream-border); }
   .form-group { margin-bottom: 1.2rem; }
   .form-label { font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
-  .form-input {
-    width: 100%; border: 1px solid var(--cream-border); background: #fff;
-    padding: 0.7rem 1rem; font-family: var(--font-body); font-size: 0.9rem;
-    color: var(--text); outline: none; transition: border-color var(--transition);
-  }
+  .form-input { width: 100%; border: 1px solid var(--cream-border); background: #fff; padding: 0.7rem 1rem; font-family: var(--font-body); font-size: 0.9rem; color: var(--text); outline: none; transition: border-color var(--transition); }
   .form-input:focus { border-color: var(--brown); }
   .form-input::placeholder { color: var(--text-muted); }
   textarea.form-input { resize: vertical; min-height: 80px; }
   .radio-group { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .radio-option {
-    flex:1; min-width: 140px; border: 1px solid var(--cream-border);
-    padding: 1rem; cursor: pointer; transition: all var(--transition); background: #fff;
-  }
+  .radio-option { flex:1; min-width: 140px; border: 1px solid var(--cream-border); padding: 1rem; cursor: pointer; transition: all var(--transition); background: #fff; }
   .radio-option.selected { border-color: var(--brown); background: rgba(74,53,37,0.04); }
   .radio-option input { display: none; }
   .radio-title { font-size: 0.88rem; color: var(--brown); margin-bottom: 0.2rem; }
   .radio-desc { font-size: 0.75rem; color: var(--text-muted); }
-
-  .bank-info {
-    background: var(--cream-dark); border: 1px solid var(--cream-border);
-    border-left: 3px solid var(--brown); padding: 1.2rem 1.4rem; margin-top: 1rem;
-  }
+  .bank-info { background: var(--cream-dark); border: 1px solid var(--cream-border); border-left: 3px solid var(--brown); padding: 1.2rem 1.4rem; margin-top: 1rem; }
   .bank-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem; }
   .bank-info strong { font-size: 1.05rem; color: var(--brown); font-family: var(--font-jp); }
   .bank-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.8rem; line-height: 1.6; }
 
-  /* ── SUCCESS PAGE ── */
+  /* SUCCESS */
   .success-page { padding: 8rem 5vw; text-align: center; }
   .success-icon { font-size: 3rem; margin-bottom: 1.5rem; }
   .success-page h2 { font-family: var(--font-jp); font-size: 1.8rem; color: var(--brown); margin-bottom: 1rem; }
   .success-page p { color: var(--text-muted); font-size: 0.9rem; max-width: 400px; margin: 0 auto 2rem; }
 
-  /* ── ADMIN ── */
-  .admin-login {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: var(--brown);
-  }
-  .admin-login-box {
-    background: var(--cream); padding: 3rem; width: 360px; text-align: center;
-  }
+  /* CLOSED */
+  .closed-page { padding: 8rem 5vw; text-align: center; }
+  .closed-page h2 { font-family: var(--font-jp); font-size: 1.8rem; color: var(--brown); margin-bottom: 1rem; }
+  .closed-page p { color: var(--text-muted); font-size: 0.9rem; }
+
+  /* ADMIN */
+  .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--brown); }
+  .admin-login-box { background: var(--cream); padding: 3rem; width: 360px; text-align: center; }
   .admin-login-box h2 { font-family: var(--font-jp); color: var(--brown); margin-bottom: 0.3rem; font-size: 1.4rem; }
   .admin-login-box p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 2rem; }
   .admin-login-error { color: var(--red); font-size: 0.8rem; margin-top: 0.8rem; }
-
   .admin-wrap { min-height: 100vh; background: #F7F4F0; }
-  .admin-header {
-    background: var(--brown); color: var(--cream);
-    padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
-  }
+  .admin-header { background: var(--brown); color: var(--cream); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
   .admin-header h1 { font-family: var(--font-jp); font-size: 1.2rem; letter-spacing: 0.1em; }
   .admin-header button { background: rgba(255,255,255,0.15); border: none; color: var(--cream); padding: 0.4rem 1rem; cursor: pointer; font-family: var(--font-body); font-size: 0.8rem; transition: background var(--transition); }
   .admin-header button:hover { background: rgba(255,255,255,0.25); }
-  .admin-tabs {
-    display: flex; border-bottom: 2px solid var(--cream-border);
-    background: #fff; padding: 0 2rem;
-  }
-  .admin-tab {
-    padding: 1rem 1.5rem; font-size: 0.85rem; cursor: pointer;
-    border-bottom: 2px solid transparent; margin-bottom: -2px;
-    color: var(--text-muted); transition: all var(--transition); letter-spacing: 0.05em;
-  }
+  .admin-tabs { display: flex; border-bottom: 2px solid var(--cream-border); background: #fff; padding: 0 2rem; }
+  .admin-tab { padding: 1rem 1.5rem; font-size: 0.85rem; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: var(--text-muted); transition: all var(--transition); letter-spacing: 0.05em; }
   .admin-tab.active { color: var(--brown); border-bottom-color: var(--brown); }
   .admin-content { padding: 2rem; }
-
-  .admin-toolbar {
-    display: flex; gap: 1rem; margin-bottom: 1.5rem;
-    flex-wrap: wrap; align-items: center; justify-content: space-between;
-  }
+  .admin-toolbar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; justify-content: space-between; }
   .admin-toolbar h2 { font-family: var(--font-jp); font-size: 1.1rem; color: var(--brown); }
-  .btn-sm {
-    padding: 0.5rem 1.2rem; font-size: 0.8rem; letter-spacing: 0.08em;
-    border: none; cursor: pointer; font-family: var(--font-body); transition: all var(--transition);
-  }
+  .btn-sm { padding: 0.5rem 1.2rem; font-size: 0.8rem; letter-spacing: 0.08em; border: none; cursor: pointer; font-family: var(--font-body); transition: all var(--transition); }
   .btn-sm.primary { background: var(--brown); color: var(--cream); }
   .btn-sm.primary:hover { background: var(--brown-light); }
   .btn-sm.outline { background: transparent; border: 1px solid var(--brown); color: var(--brown); }
   .btn-sm.outline:hover { background: var(--brown); color: var(--cream); }
   .btn-sm.green { background: var(--green); color: #fff; }
   .btn-sm.red { background: var(--red); color: #fff; }
-
   .table-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--cream-border); }
   table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  th {
-    background: var(--cream-dark); padding: 0.8rem 1rem; text-align: left;
-    font-weight: 500; color: var(--text-muted); letter-spacing: 0.08em;
-    font-size: 0.75rem; border-bottom: 1px solid var(--cream-border); white-space: nowrap;
-  }
+  th { background: var(--cream-dark); padding: 0.8rem 1rem; text-align: left; font-weight: 500; color: var(--text-muted); letter-spacing: 0.08em; font-size: 0.75rem; border-bottom: 1px solid var(--cream-border); white-space: nowrap; }
   td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--cream-border); color: var(--text); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--cream); }
-
-  .badge {
-    display: inline-block; padding: 0.2rem 0.7rem; font-size: 0.72rem; border-radius: 2px;
-    letter-spacing: 0.05em;
-  }
+  .badge { display: inline-block; padding: 0.2rem 0.7rem; font-size: 0.72rem; border-radius: 2px; letter-spacing: 0.05em; }
   .badge.pending { background: #FFF3CD; color: #856404; }
   .badge.done { background: #D1E7DD; color: #0A6640; }
   .badge.active { background: #D1E7DD; color: #0A6640; }
   .badge.inactive { background: #F8D7DA; color: #842029; }
 
-  /* Product admin card */
+  /* FORM SETTINGS ADMIN */
+  .settings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+  .settings-card { background: #fff; border: 1px solid var(--cream-border); padding: 1.4rem; }
+  .settings-card h3 { font-family: var(--font-jp); color: var(--brown); font-size: 1rem; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--cream-border); }
+  .settings-tag-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; min-height: 32px; }
+  .settings-tag { display: flex; align-items: center; gap: 0.3rem; background: var(--cream-dark); border: 1px solid var(--cream-border); padding: 0.3rem 0.6rem; font-size: 0.78rem; }
+  .settings-tag button { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.8rem; padding: 0; line-height: 1; }
+  .settings-tag button:hover { color: var(--red); }
+  .settings-add-row { display: flex; gap: 0.5rem; }
+  .settings-add-row input { flex: 1; border: 1px solid var(--cream-border); padding: 0.4rem 0.7rem; font-family: var(--font-body); font-size: 0.82rem; outline: none; }
+  .settings-add-row input:focus { border-color: var(--brown); }
+  .settings-add-row input[type=number] { max-width: 90px; }
+
+  /* toggle switch */
+  .toggle-wrap { display: flex; align-items: center; gap: 1rem; }
+  .toggle { position: relative; width: 48px; height: 26px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: var(--cream-border); cursor: pointer; transition: 0.3s; border-radius: 26px; }
+  .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; transition: 0.3s; border-radius: 50%; }
+  input:checked + .toggle-slider { background: var(--green); }
+  input:checked + .toggle-slider:before { transform: translateX(22px); }
+  .toggle-label { font-size: 0.88rem; color: var(--text); }
+
+  /* product admin */
   .product-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
   .product-admin-card { background: #fff; border: 1px solid var(--cream-border); overflow: hidden; }
   .product-admin-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: var(--cream-dark); }
@@ -390,25 +236,15 @@
   .product-admin-price { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem; }
   .product-admin-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
-  /* Product edit modal */
-  .edit-modal-overlay {
-    position: fixed; inset: 0; z-index: 300;
-    background: rgba(44,31,18,0.5); backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center; padding: 1rem;
-    opacity: 0; pointer-events: none; transition: opacity var(--transition);
-  }
+  /* edit modal */
+  .edit-modal-overlay { position: fixed; inset: 0; z-index: 300; background: rgba(44,31,18,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
   .edit-modal-overlay.open { opacity: 1; pointer-events: all; }
-  .edit-modal {
-    background: var(--cream); width: 100%; max-width: 600px;
-    max-height: 90vh; overflow-y: auto;
-    transform: translateY(20px); transition: transform var(--transition);
-  }
+  .edit-modal { background: var(--cream); width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform var(--transition); }
   .edit-modal-overlay.open .edit-modal { transform: translateY(0); }
   .edit-modal-header { padding: 1.5rem 1.8rem; border-bottom: 1px solid var(--cream-border); display: flex; justify-content: space-between; align-items: center; }
   .edit-modal-header h3 { font-family: var(--font-jp); color: var(--brown); }
   .edit-modal-body { padding: 1.5rem 1.8rem; }
   .edit-modal-footer { padding: 1rem 1.8rem; border-top: 1px solid var(--cream-border); display: flex; justify-content: flex-end; gap: 0.8rem; }
-
   .options-editor { border: 1px solid var(--cream-border); background: #fff; }
   .options-editor-header { padding: 0.7rem 1rem; background: var(--cream-dark); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-muted); }
   .option-row { display: flex; gap: 0.5rem; padding: 0.5rem 0.8rem; border-top: 1px solid var(--cream-border); align-items: center; }
@@ -416,117 +252,93 @@
   .option-row input:focus { border-color: var(--brown); }
   .option-row-del { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; }
   .option-row-del:hover { color: var(--red); }
-
-  .img-upload-area {
-    border: 2px dashed var(--cream-border); padding: 2rem; text-align: center;
-    cursor: pointer; transition: border-color var(--transition); background: #fff;
-    position: relative;
-  }
+  .img-upload-area { border: 2px dashed var(--cream-border); padding: 2rem; text-align: center; cursor: pointer; transition: border-color var(--transition); background: #fff; position: relative; }
   .img-upload-area:hover { border-color: var(--brown-pale); }
-  .img-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .img-upload-area p { font-size: 0.82rem; color: var(--text-muted); }
   .img-preview { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
-    background: var(--brown); color: var(--cream); padding: 0.9rem 1.5rem;
-    font-size: 0.85rem; letter-spacing: 0.05em; opacity: 0;
-    transform: translateY(10px); transition: all 0.3s ease;
-    pointer-events: none; max-width: 320px;
-  }
+  .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; background: var(--brown); color: var(--cream); padding: 0.9rem 1.5rem; font-size: 0.85rem; letter-spacing: 0.05em; opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; max-width: 320px; }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { background: var(--red); }
   .toast.success { background: var(--green); }
 
-  /* Responsive */
   @media(max-width:600px) {
     .hero { padding: 4rem 5vw 3rem; }
     .admin-content { padding: 1rem; }
     .modal-body { padding: 1rem 1.2rem 1.5rem; }
     .modal-footer { padding: 1rem 1.2rem; }
     .modal-header { padding: 1.2rem 1.2rem 0.8rem; }
+    .settings-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ══════════════════════════════════════════
-     STOREFRONT
-══════════════════════════════════════════ -->
+<!-- ══ STOREFRONT ══ -->
 <div id="storefront">
-
-  <!-- Header -->
   <header>
-    <a class="logo" onclick="showPage('home')">
-      木と家
-      <span>KITOYA DESSERTS</span>
-    </a>
+    <a class="logo" onclick="showPage('home')">木と家<span>KITOYA DESSERTS</span></a>
     <nav>
       <a onclick="showPage('home')">商品</a>
-      <a onclick="showPage('cart')">購物車</a>
+      <a onclick="showPage('cart')">訂購</a>
     </nav>
-    <button class="cart-btn" onclick="showPage('cart')">
-      🛒 <span id="cartCountHeader">0</span>
-    </button>
+    <button class="cart-btn" onclick="showPage('cart')">🛒 <span id="cartCountHeader">0</span></button>
   </header>
 
-  <!-- HOME PAGE -->
+  <!-- HOME -->
   <div id="page-home" class="page active">
     <section class="hero">
       <p class="hero-label">Handcrafted · Seasonal · Minimal</p>
       <h1>以手作溫度<br>傳遞四季甜味</h1>
-      <p>每一份甜點都是限量手作，食材嚴選、用心製作，<br>希望你品嚐到的不只是甜，而是一種溫柔。</p>
+      <p>每一份甜點都是限量手作，食材嚴選、用心製作，希望你品嚐到的不只是甜，而是一種溫柔。</p>
     </section>
-
+    <div id="noticeBar" style="display:none" class="notice-bar"></div>
     <div class="divider"><span>本季商品</span></div>
-
     <section class="products-section">
-      <div id="productsLoading" class="loading-wrap">
-        <p>商品載入中 <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></p>
-      </div>
+      <div id="productsLoading" class="loading-wrap"><p>商品載入中 <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></p></div>
       <div id="productsGrid" class="products-grid" style="display:none"></div>
     </section>
   </div>
 
-  <!-- CART PAGE -->
+  <!-- CART / ORDER -->
   <div id="page-cart" class="page">
     <div class="cart-page">
-      <h2 class="page-title">購物車</h2>
-      <p class="page-subtitle">CART</p>
-      <div id="cartItems"></div>
-      <div id="cartSummary"></div>
-      <div id="checkoutForm"></div>
+      <h2 class="page-title">預訂蛋糕</h2>
+      <p class="page-subtitle">ORDER FORM</p>
+      <div id="orderFormWrap"></div>
     </div>
   </div>
 
-  <!-- SUCCESS PAGE -->
+  <!-- SUCCESS -->
   <div id="page-success" class="page">
     <div class="success-page">
       <div class="success-icon">🍵</div>
-      <h2>感謝您的訂購</h2>
-      <p>我們已收到您的訂單，<br>請完成匯款後等候確認通知。</p>
+      <h2>感謝您的預訂</h2>
+      <p>我們已收到您的訂單，請完成匯款後等候確認通知。</p>
       <p id="successOrderId" style="font-size:0.78rem;color:var(--text-muted);margin-bottom:2rem;"></p>
-      <button class="btn-primary" onclick="showPage('home')">繼續選購</button>
+      <button class="btn-primary" onclick="showPage('home')">回首頁</button>
     </div>
   </div>
 
-</div><!-- /storefront -->
+  <!-- CLOSED -->
+  <div id="page-closed" class="page">
+    <div class="closed-page">
+      <div style="font-size:3rem;margin-bottom:1.5rem">🌙</div>
+      <h2>目前暫停接單</h2>
+      <p id="closedNotice" style="margin-top:0.5rem"></p>
+    </div>
+  </div>
+</div>
 
-<!-- Product Detail Modal -->
+<!-- Product Modal (for product browsing) -->
 <div class="modal-overlay" id="productModal" onclick="closeProductModal(event)">
   <div class="modal" id="modalContent"></div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     ADMIN
-══════════════════════════════════════════ -->
+<!-- ══ ADMIN ══ -->
 <div id="adminSection" style="display:none">
-
-  <!-- Admin Login -->
   <div id="adminLogin" class="admin-login">
     <div class="admin-login-box">
       <h2>後台管理</h2>
@@ -536,8 +348,6 @@
       <p class="admin-login-error" id="adminLoginError"></p>
     </div>
   </div>
-
-  <!-- Admin Dashboard -->
   <div id="adminDash" class="admin-wrap" style="display:none">
     <div class="admin-header">
       <h1>木と家 ｜ 後台管理</h1>
@@ -548,10 +358,11 @@
     </div>
     <div class="admin-tabs">
       <div class="admin-tab active" onclick="switchAdminTab('orders',this)">訂單管理</div>
+      <div class="admin-tab" onclick="switchAdminTab('form',this)">表單設定</div>
       <div class="admin-tab" onclick="switchAdminTab('products',this)">商品管理</div>
     </div>
     <div class="admin-content">
-      <!-- Orders Tab -->
+      <!-- ORDERS TAB -->
       <div id="adminTabOrders">
         <div class="admin-toolbar">
           <h2>所有訂單</h2>
@@ -561,29 +372,28 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table id="ordersTable">
-            <thead>
-              <tr>
-                <th>訂單編號</th>
-                <th>時間</th>
-                <th>顧客姓名</th>
-                <th>電話</th>
-                <th>取貨方式</th>
-                <th>付款方式</th>
-                <th>帳號末五碼</th>
-                <th>總金額</th>
-                <th>備註</th>
-                <th>狀態</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody id="ordersBody">
-              <tr><td colspan="11" style="text-align:center;color:var(--text-muted);padding:3rem">載入中...</td></tr>
-            </tbody>
+          <table>
+            <thead><tr>
+              <th>訂單編號</th><th>時間</th><th>姓名</th><th>IG</th><th>電話</th>
+              <th>取貨日期</th><th>時段</th><th>取貨方式</th><th>尺寸</th><th>口味</th>
+              <th>配件一</th><th>配件二</th><th>保冷袋</th>
+              <th>帳號末五碼</th><th>總金額</th><th>備註</th><th>狀態</th><th>操作</th>
+            </tr></thead>
+            <tbody id="ordersBody"><tr><td colspan="18" style="text-align:center;color:var(--text-muted);padding:3rem">載入中...</td></tr></tbody>
           </table>
         </div>
       </div>
-      <!-- Products Tab -->
+
+      <!-- FORM SETTINGS TAB -->
+      <div id="adminTabForm" style="display:none">
+        <div class="admin-toolbar">
+          <h2>表單設定</h2>
+          <span style="font-size:0.8rem;color:var(--text-muted)">修改後點「儲存」即時生效</span>
+        </div>
+        <div id="formSettingsPanel"></div>
+      </div>
+
+      <!-- PRODUCTS TAB -->
       <div id="adminTabProducts" style="display:none">
         <div class="admin-toolbar">
           <h2>商品管理</h2>
@@ -593,44 +403,50 @@
       </div>
     </div>
   </div>
+</div>
 
-</div><!-- /adminSection -->
-
-<!-- Product Edit Modal -->
 <div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal(event)">
   <div class="edit-modal" id="editModalContent"></div>
 </div>
 
 <script>
-// ════════════════════════════════════════
-// CONFIG — 請換成你的實際值
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
 const SUPABASE_URL = 'https://cbooopwgifrspvnbdxwj.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_laRsuGVqSQlal_qRpJ1-dg_GhoZc8HW'
-const ADMIN_PASSWORD = 'kitoya2025'  // ← 請自行修改這組密碼
-const DELIVERY_FEE = 200             // ← 黑貓宅配運費（元）
+const ADMIN_PASSWORD = 'kitoya2025'   // ← 請修改
+const DELIVERY_FEE = 200
 const BANK_INFO = {
   bank: '玉山銀行（808）',
-  account: '1234-567-890123',       // ← 請換成你的帳號
-  name: '木と家甜點工作室'
+  account: '1234-567-890123',        // ← 請修改
+  name: '木と家甜點工作室'             // ← 請修改
 }
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 // STATE
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 let cart = []
 let products = []
+let formSettings = {}
 let currentProduct = null
 let currentOptions = {}
 let currentAddons = []
 let currentQty = 1
 let adminAuthed = false
+let allOrders = []
+let adminProducts = []
+let editingProduct = null
+let editOptions = { sizes:[], flavors:[], styles:[], addons:[] }
+let newImageFile = null
+let newImagePreview = null
+let selectedDelivery = 'pickup'
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 // ROUTING
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 function checkAdminRoute() {
   if (window.location.hash === '#admin') {
     document.getElementById('storefront').style.display = 'none'
@@ -641,13 +457,13 @@ function checkAdminRoute() {
 function showPage(name) {
   document.querySelectorAll('#storefront .page').forEach(p => p.classList.remove('active'))
   document.getElementById('page-' + name).classList.add('active')
-  if (name === 'cart') renderCart()
+  if (name === 'cart') renderOrderForm()
   window.scrollTo(0, 0)
 }
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 // TOAST
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 let toastTimer
 function toast(msg, type='') {
   const el = document.getElementById('toast')
@@ -657,14 +473,37 @@ function toast(msg, type='') {
   toastTimer = setTimeout(() => el.className='toast', 3000)
 }
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
+// LOAD FORM SETTINGS
+// ══════════════════════════════════════════
+async function loadFormSettings() {
+  const { data } = await sb.from('form_settings').select('*')
+  if (!data) return
+  data.forEach(row => { formSettings[row.id] = row.value })
+
+  // 公告
+  const notice = formSettings['form_notice']
+  if (notice) {
+    const bar = document.getElementById('noticeBar')
+    bar.style.display = 'block'
+    bar.innerHTML = `<strong>📌 公告</strong>　${notice}`
+  }
+
+  // 若關閉接單
+  if (formSettings['form_open'] === false || formSettings['form_open'] === 'false') {
+    document.getElementById('closedNotice').textContent = formSettings['form_notice'] || '請關注我們的 Instagram 取得最新開單資訊。'
+    showPage('closed')
+  }
+}
+
+// ══════════════════════════════════════════
 // LOAD PRODUCTS
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 async function loadProducts() {
   const { data, error } = await sb.from('products').select('*').eq('is_active', true).order('created_at')
   document.getElementById('productsLoading').style.display = 'none'
   document.getElementById('productsGrid').style.display = 'grid'
-  if (error || !data.length) {
+  if (error || !data?.length) {
     document.getElementById('productsGrid').innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1">目前尚無上架商品。</p>'
     return
   }
@@ -672,9 +511,7 @@ async function loadProducts() {
   document.getElementById('productsGrid').innerHTML = data.map(p => `
     <div class="product-card" onclick="openProduct('${p.id}')">
       <div class="product-img-wrap">
-        ${p.image_url
-          ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy">`
-          : `<div class="product-img-placeholder">🍰</div>`}
+        ${p.image_url ? `<img src="${p.image_url}" alt="${p.name}" loading="lazy">` : `<div class="product-img-placeholder">🍰</div>`}
       </div>
       <div class="product-info">
         <div class="product-name">${p.name}</div>
@@ -685,228 +522,32 @@ async function loadProducts() {
   `).join('')
 }
 
-// ════════════════════════════════════════
-// PRODUCT MODAL
-// ════════════════════════════════════════
-function openProduct(id) {
-  const p = products.find(x => x.id === id)
-  if (!p) return
-  currentProduct = p
-  currentOptions = {}
-  currentAddons = []
-  currentQty = 1
-
-  const opts = p.options || {}
-  let optHtml = ''
-
-  if (opts.sizes?.length) {
-    optHtml += `<div class="option-group">
-      <span class="option-label">SIZE 尺寸</span>
-      <div class="option-chips" id="opt-size">${opts.sizes.map((s,i) =>
-        `<button class="option-chip ${i===0?'selected':''}" onclick="selectOption('size','${s.name}',${s.price||0},this)">
-          ${s.name}${s.price?`<span class="chip-price">+${s.price}</span>`:''}
-        </button>`
-      ).join('')}</div></div>`
-    if (opts.sizes[0]) currentOptions.size = {name: opts.sizes[0].name, price: opts.sizes[0].price||0}
-  }
-
-  if (opts.flavors?.length) {
-    optHtml += `<div class="option-group">
-      <span class="option-label">FLAVOR 口味</span>
-      <div class="option-chips" id="opt-flavor">${opts.flavors.map((f,i) =>
-        `<button class="option-chip ${i===0?'selected':''}" onclick="selectOption('flavor','${f.name}',${f.price||0},this)">
-          ${f.name}${f.price?`<span class="chip-price">+${f.price}</span>`:''}
-        </button>`
-      ).join('')}</div></div>`
-    if (opts.flavors[0]) currentOptions.flavor = {name: opts.flavors[0].name, price: opts.flavors[0].price||0}
-  }
-
-  if (opts.styles?.length) {
-    optHtml += `<div class="option-group">
-      <span class="option-label">STYLE 樣式</span>
-      <div class="option-chips" id="opt-style">${opts.styles.map((s,i) =>
-        `<button class="option-chip ${i===0?'selected':''}" onclick="selectOption('style','${s.name}',${s.price||0},this)">
-          ${s.name}${s.price?`<span class="chip-price">+${s.price}</span>`:''}
-        </button>`
-      ).join('')}</div></div>`
-    if (opts.styles[0]) currentOptions.style = {name: opts.styles[0].name, price: opts.styles[0].price||0}
-  }
-
-  let addonHtml = ''
-  if (opts.addons?.length) {
-    addonHtml = `<div class="option-group">
-      <span class="option-label">ADD-ON 加購</span>
-      ${opts.addons.map((a,i) => `
-        <div class="addon-item" id="addon-${i}" onclick="toggleAddon(${i},'${a.name}',${a.price||0})">
-          <div class="addon-check" id="addon-check-${i}"></div>
-          <span class="addon-name">${a.name}</span>
-          <span class="addon-price">+NT$ ${a.price||0}</span>
-        </div>`
-      ).join('')}
-    </div>`
-  }
-
-  document.getElementById('modalContent').innerHTML = `
-    ${p.image_url
-      ? `<img class="modal-img" src="${p.image_url}" alt="${p.name}">`
-      : `<div class="modal-img-placeholder">🍰</div>`}
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">${p.name}</div>
-        <div class="modal-price">${p.description || ''}</div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      ${optHtml}
-      ${addonHtml}
-      <div class="option-group">
-        <span class="option-label">QUANTITY 數量</span>
-        <div class="qty-wrap">
-          <button class="qty-btn" onclick="changeQty(-1)">−</button>
-          <span class="qty-num" id="modalQty">1</span>
-          <button class="qty-btn" onclick="changeQty(1)">＋</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div class="modal-total">
-        小計
-        <strong id="modalTotal">NT$ ${p.base_price}</strong>
-      </div>
-      <button class="btn-primary" onclick="addToCart()">加入購物車</button>
-    </div>
-  `
-  document.getElementById('productModal').classList.add('open')
-  document.body.style.overflow = 'hidden'
-  updateModalTotal()
-}
-
-function selectOption(type, name, price, el) {
-  el.closest('.option-chips').querySelectorAll('.option-chip').forEach(c => c.classList.remove('selected'))
-  el.classList.add('selected')
-  currentOptions[type] = {name, price}
-  updateModalTotal()
-}
-
-function toggleAddon(i, name, price) {
-  const idx = currentAddons.findIndex(a => a.name === name)
-  if (idx >= 0) {
-    currentAddons.splice(idx, 1)
-    document.getElementById('addon-'+i).classList.remove('selected')
-    document.getElementById('addon-check-'+i).textContent = ''
-  } else {
-    currentAddons.push({name, price})
-    document.getElementById('addon-'+i).classList.add('selected')
-    document.getElementById('addon-check-'+i).textContent = '✓'
-  }
-  updateModalTotal()
-}
-
-function changeQty(d) {
-  currentQty = Math.max(1, currentQty + d)
-  document.getElementById('modalQty').textContent = currentQty
-  updateModalTotal()
-}
-
-function calcUnitPrice() {
-  let price = currentProduct.base_price
-  Object.values(currentOptions).forEach(o => price += (o.price || 0))
-  currentAddons.forEach(a => price += (a.price || 0))
-  return price
-}
-
-function updateModalTotal() {
-  const total = calcUnitPrice() * currentQty
-  const el = document.getElementById('modalTotal')
-  if (el) el.textContent = 'NT$ ' + total.toLocaleString()
-}
-
-function addToCart() {
-  const unit = calcUnitPrice()
-  cart.push({
-    id: Date.now() + Math.random(),
-    productId: currentProduct.id,
-    productName: currentProduct.name,
-    imageUrl: currentProduct.image_url,
-    selectedOptions: {...currentOptions},
-    addons: [...currentAddons],
-    quantity: currentQty,
-    unitPrice: unit,
-    subtotal: unit * currentQty
-  })
-  updateCartCount()
-  closeModal()
-  toast('已加入購物車 🛒', 'success')
-}
-
-function closeModal() {
-  document.getElementById('productModal').classList.remove('open')
-  document.body.style.overflow = ''
-}
-
-function closeProductModal(e) {
-  if (e.target === document.getElementById('productModal')) closeModal()
-}
-
-function updateCartCount() {
-  const count = cart.reduce((s, i) => s + i.quantity, 0)
-  document.getElementById('cartCountHeader').textContent = count
-}
-
-// ════════════════════════════════════════
-// CART & CHECKOUT
-// ════════════════════════════════════════
-function renderCart() {
-  const itemsEl = document.getElementById('cartItems')
-  const summaryEl = document.getElementById('cartSummary')
-  const formEl = document.getElementById('checkoutForm')
-
-  if (!cart.length) {
-    itemsEl.innerHTML = '<p style="color:var(--text-muted);padding:3rem 0;text-align:center">購物車是空的</p>'
-    summaryEl.innerHTML = ''
-    formEl.innerHTML = ''
+// ══════════════════════════════════════════
+// ORDER FORM（動態從 form_settings 讀取）
+// ══════════════════════════════════════════
+function renderOrderForm() {
+  const wrap = document.getElementById('orderFormWrap')
+  if (!Object.keys(formSettings).length) {
+    wrap.innerHTML = '<p style="color:var(--text-muted);padding:3rem 0;text-align:center">設定載入中...</p>'
     return
   }
 
-  itemsEl.innerHTML = cart.map((item, idx) => {
-    const opts = Object.entries(item.selectedOptions).map(([k,v]) => v.name).join('・')
-    const addons = item.addons.map(a => a.name).join('・')
-    return `
-    <div class="cart-item">
-      ${item.imageUrl
-        ? `<img class="cart-item-img" src="${item.imageUrl}" alt="${item.productName}">`
-        : `<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.5rem">🍰</div>`}
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.productName}</div>
-        <div class="cart-item-opts">${[opts, addons].filter(Boolean).join(' ｜ ')}</div>
-        <div class="cart-item-opts">數量：${item.quantity}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem">
-        <span class="cart-item-price">NT$ ${item.subtotal.toLocaleString()}</span>
-        <button class="cart-item-remove" onclick="removeCartItem(${idx})">✕</button>
-      </div>
-    </div>`
-  }).join('')
+  const pickupDates = formSettings['pickup_dates'] || []
+  const timeSlots = formSettings['time_slots'] || []
+  const cakeSizes = formSettings['cake_sizes'] || []
+  const flavors = formSettings['flavors'] || []
+  const deco1Options = formSettings['deco1_options'] || []
+  const deco2Options = formSettings['deco2_options'] || []
+  const bagPrice = parseInt(formSettings['bag_price'] || 30)
 
-  const subtotal = cart.reduce((s, i) => s + i.subtotal, 0)
-
-  summaryEl.innerHTML = `
-    <div class="cart-summary">
-      <div class="summary-row"><span>商品小計</span><span>NT$ ${subtotal.toLocaleString()}</span></div>
-      <div class="summary-row" id="deliveryRow" style="display:none"><span>宅配運費</span><span>NT$ ${DELIVERY_FEE}</span></div>
-      <div class="summary-row total"><span>訂單總計</span><span id="totalAmount">NT$ ${subtotal.toLocaleString()}</span></div>
-    </div>`
-
-  formEl.innerHTML = `
+  wrap.innerHTML = `
     <div class="checkout-form">
-
       <!-- 注意事項 -->
       <div class="bank-info" style="margin-bottom:1.5rem;border-left-color:var(--brown-pale)">
         <p style="font-size:0.82rem;line-height:1.8;color:var(--text-muted)">
-          📌 本頁為 <strong style="color:var(--brown)">6月蛋糕訂購</strong>專用表單<br>
-          📌 下單前請詳閱說明，填寫完畢後等候確認通知<br>
-          📌 付款方式：<strong style="color:var(--brown)">匯款後憑轉帳截圖確認</strong>
+          📌 付款方式：匯款後截圖傳給我們確認<br>
+          📌 下單後請等候確認通知，未收到請透過 IG 聯繫<br>
+          📌 ${formSettings['form_notice'] || ''}
         </p>
       </div>
 
@@ -918,7 +559,7 @@ function renderCart() {
       </div>
       <div class="form-group">
         <label class="form-label">Instagram 帳號 *</label>
-        <input class="form-input" id="fIg" placeholder="@yourname（方便聯繫確認）">
+        <input class="form-input" id="fIg" placeholder="@yourname">
       </div>
       <div class="form-group">
         <label class="form-label">電話 *</label>
@@ -927,23 +568,15 @@ function renderCart() {
 
       <!-- 取貨日期 -->
       <p class="form-section-title" style="margin-top:1.5rem">取貨日期 *</p>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">請選擇一個取貨日期</p>
-      <div class="option-chips" id="pickupDateChips" style="flex-wrap:wrap;gap:0.5rem;display:flex">
-        ${['6/12（四）','6/13（五）','6/14（六）','6/15（日）','6/21（六）','6/22（日）','6/28（六）','6/29（日）'].map((d,i)=>`
-          <button class="option-chip" onclick="selectPickupDate('${d}',this)">${d}</button>
-        `).join('')}
+      <div class="option-chips" id="pickupDateChips">
+        ${pickupDates.map(d => `<button class="option-chip" onclick="selectChip('pickupDate','${d}',this)">${d}</button>`).join('')}
       </div>
       <input type="hidden" id="fPickupDate">
 
       <!-- 取貨時段 -->
       <p class="form-section-title" style="margin-top:1.5rem">取貨時段 *</p>
-      <div class="radio-group">
-        <label class="radio-option" id="time-a" onclick="selectTimeSlot('14:00 – 16:00')">
-          <div class="radio-title">🕑 14:00 – 16:00</div>
-        </label>
-        <label class="radio-option" id="time-b" onclick="selectTimeSlot('15:00 – 17:00')">
-          <div class="radio-title">🕒 15:00 – 17:00</div>
-        </label>
+      <div class="option-chips" id="timeSlotChips">
+        ${timeSlots.map(t => `<button class="option-chip" onclick="selectChip('timeSlot','${t}',this)">${t}</button>`).join('')}
       </div>
       <input type="hidden" id="fTimeSlot">
 
@@ -951,12 +584,10 @@ function renderCart() {
       <p class="form-section-title" style="margin-top:1.5rem">取貨方式 *</p>
       <div class="radio-group">
         <label class="radio-option selected" id="opt-pickup" onclick="selectDelivery('pickup')">
-          <input type="radio" name="delivery" value="pickup" checked>
           <div class="radio-title">🤝 面交自取</div>
           <div class="radio-desc">約定地點面交</div>
         </label>
         <label class="radio-option" id="opt-delivery" onclick="selectDelivery('delivery')">
-          <input type="radio" name="delivery" value="delivery">
           <div class="radio-title">📦 黑貓低溫宅配</div>
           <div class="radio-desc">運費 NT$ ${DELIVERY_FEE}</div>
         </label>
@@ -968,69 +599,61 @@ function renderCart() {
 
       <!-- 蛋糕尺寸 -->
       <p class="form-section-title" style="margin-top:1.5rem">蛋糕尺寸 *</p>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">價格依尺寸調整</p>
-      <div class="option-chips" id="cakeSizeChips" style="flex-wrap:wrap;gap:0.5rem;display:flex">
-        ${[
-          {label:'4吋（2–4人）', price:680},
-          {label:'6吋（4–6人）', price:1030},
-          {label:'7吋（6–8人）', price:1380},
-          {label:'8吋（8–12人）', price:1680}
-        ].map(s=>`
+      <div class="option-chips" id="cakeSizeChips">
+        ${cakeSizes.map(s => `
           <button class="option-chip" onclick="selectCakeSize('${s.label}',${s.price},this)">
             ${s.label}<span class="chip-price">NT$${s.price}</span>
-          </button>
-        `).join('')}
+          </button>`).join('')}
       </div>
       <input type="hidden" id="fCakeSize">
       <input type="hidden" id="fCakeSizePrice" value="0">
 
       <!-- 口味 -->
       <p class="form-section-title" style="margin-top:1.5rem">蛋糕口味 *</p>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">請選擇一款口味</p>
-      <div class="option-chips" id="flavorChips" style="flex-wrap:wrap;gap:0.5rem;display:flex">
-        ${['香草生乳酪慕斯','草莓生乳酪慕斯','抹茶生乳酪慕斯','巧克力生乳酪慕斯','焦糖生乳酪慕斯','芒果生乳酪慕斯'].map(f=>`
-          <button class="option-chip" onclick="selectFlavor('${f}',this)">${f}</button>
-        `).join('')}
+      <div class="flavor-grid" id="flavorGrid">
+        ${flavors.map(f => `
+          <div class="flavor-card" onclick="selectFlavor('${f.name}',this)">
+            ${f.image_url ? `<img src="${f.image_url}" alt="${f.name}">` : `<div style="aspect-ratio:1/1;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:2rem">🍰</div>`}
+            <div class="flavor-card-label">${f.name}</div>
+          </div>`).join('')}
       </div>
       <input type="hidden" id="fFlavor">
 
       <!-- 配件一 -->
-      <p class="form-section-title" style="margin-top:1.5rem">配件一 *</p>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">請選擇一款文字牌</p>
-      <div class="option-chips" id="deco1Chips" style="flex-wrap:wrap;gap:0.5rem;display:flex">
-        ${['Happy Birthday','Happy Anniversary','I LOVE YOU','生日快樂（中文）','不需要'].map(d=>`
-          <button class="option-chip" onclick="selectDeco1('${d}',this)">${d}</button>
-        `).join('')}
+      <p class="form-section-title" style="margin-top:1.5rem">配件一（文字牌）*</p>
+      <div class="option-chips" id="deco1Chips">
+        ${deco1Options.map(d => `<button class="option-chip" onclick="selectChip('deco1','${d}',this)">${d}</button>`).join('')}
       </div>
       <input type="hidden" id="fDeco1">
       <div id="deco1CustomGroup" style="display:none;margin-top:0.8rem">
-        <label class="form-label">自訂文字（如需其他文字請填寫）</label>
+        <label class="form-label">自訂文字</label>
         <input class="form-input" id="fDeco1Custom" placeholder="請輸入自訂文字">
       </div>
 
       <!-- 配件二 -->
-      <p class="form-section-title" style="margin-top:1.5rem">配件二</p>
-      <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">小花束裝飾（可複選）</p>
-      <div class="option-chips" id="deco2Chips" style="flex-wrap:wrap;gap:0.5rem;display:flex">
-        ${['小花束 + 金 NT$50（1入）','小花束 + 金 NT$90（2入）','小花束 + 銀 NT$50（1入）','小花束 + 銀 NT$90（2入）','不需要'].map(d=>`
-          <button class="option-chip" onclick="selectDeco2('${d}',this)">${d}</button>
-        `).join('')}
+      <p class="form-section-title" style="margin-top:1.5rem">配件二（小花束）*</p>
+      <div class="option-chips" id="deco2Chips">
+        ${deco2Options.map(d => `
+          <button class="option-chip" onclick="selectDeco2('${d.label}',${d.price},this)">
+            ${d.label}${d.price > 0 ? `<span class="chip-price">+NT$${d.price}</span>` : ''}
+          </button>`).join('')}
       </div>
       <input type="hidden" id="fDeco2">
+      <input type="hidden" id="fDeco2Price" value="0">
 
-      <!-- 加購保冷袋 -->
+      <!-- 保冷袋 -->
       <p class="form-section-title" style="margin-top:1.5rem">加購保冷袋</p>
-      <div class="option-chips" style="display:flex;gap:0.5rem;flex-wrap:wrap">
+      <div class="option-chips">
         <button class="option-chip selected" id="bag-no" onclick="selectBag('不需要',0,this)">不需要</button>
-        <button class="option-chip" id="bag-yes" onclick="selectBag('加購保冷袋 +NT$30',30,this)">加購保冷袋 <span class="chip-price">+NT$30</span></button>
+        <button class="option-chip" id="bag-yes" onclick="selectBag('加購保冷袋',${bagPrice},this)">加購保冷袋 <span class="chip-price">+NT$${bagPrice}</span></button>
       </div>
       <input type="hidden" id="fBag" value="不需要">
       <input type="hidden" id="fBagPrice" value="0">
 
-      <!-- 付款資訊 -->
+      <!-- 付款 -->
       <p class="form-section-title" style="margin-top:1.5rem">付款方式</p>
       <div class="bank-info">
-        <p>請匯款至以下帳戶後，截圖傳給我們確認</p>
+        <p>請匯款至以下帳戶，完成後截圖傳給我們</p>
         <strong>${BANK_INFO.bank}</strong>
         <p style="margin-top:0.5rem">帳號：<strong style="font-family:var(--font-body);font-size:1rem">${BANK_INFO.account}</strong></p>
         <p>戶名：${BANK_INFO.name}</p>
@@ -1041,38 +664,40 @@ function renderCart() {
         </div>
       </div>
 
-      <!-- 總金額預覽 -->
+      <!-- 金額預覽 -->
       <div class="cart-summary" style="margin-top:1.5rem">
         <div class="summary-row"><span>蛋糕費用</span><span id="previewCakePrice">請先選擇尺寸</span></div>
-        <div class="summary-row" id="deliveryRow" style="display:none"><span>宅配運費</span><span>NT$ ${DELIVERY_FEE}</span></div>
-        <div class="summary-row" id="decoRow" style="display:none"><span>配件費用</span><span id="previewDecoPrice">—</span></div>
-        <div class="summary-row" id="bagRow" style="display:none"><span>保冷袋</span><span>NT$ 30</span></div>
+        <div class="summary-row" id="decoFeeRow" style="display:none"><span>配件費用</span><span id="previewDecoPrice">—</span></div>
+        <div class="summary-row" id="bagFeeRow" style="display:none"><span>保冷袋</span><span id="previewBagPrice">—</span></div>
+        <div class="summary-row" id="deliveryFeeRow" style="display:none"><span>宅配運費</span><span>NT$ ${DELIVERY_FEE}</span></div>
         <div class="summary-row total"><span>訂單總計</span><span id="totalAmount">NT$ —</span></div>
       </div>
 
       <!-- 備註 -->
       <div class="form-group" style="margin-top:1.5rem">
         <label class="form-label">其他備註</label>
-        <textarea class="form-input" id="fNote" placeholder="過敏、特殊需求等..."></textarea>
+        <textarea class="form-input" id="fNote" placeholder="過敏、特殊需求..."></textarea>
       </div>
 
       <button class="btn-primary" style="width:100%;padding:1rem;margin-top:0.5rem;font-size:0.95rem" onclick="submitOrder()">確認送出訂單</button>
     </div>`
 }
 
-let selectedDelivery = 'pickup'
-let selectedPayment = 'transfer'
-
-function selectPickupDate(val, el) {
-  document.querySelectorAll('#pickupDateChips .option-chip').forEach(c => c.classList.remove('selected'))
+// ── 選擇器函式 ──
+function selectChip(field, val, el) {
+  el.closest('.option-chips').querySelectorAll('.option-chip').forEach(c => c.classList.remove('selected'))
   el.classList.add('selected')
-  document.getElementById('fPickupDate').value = val
+  const map = { pickupDate:'fPickupDate', timeSlot:'fTimeSlot', deco1:'fDeco1' }
+  document.getElementById(map[field]).value = val
+  if (field === 'deco1') {
+    document.getElementById('deco1CustomGroup').style.display = val === '不需要' ? 'none' : 'block'
+  }
 }
 
-function selectTimeSlot(val) {
-  document.getElementById('time-a').classList.toggle('selected', val==='14:00 – 16:00')
-  document.getElementById('time-b').classList.toggle('selected', val==='15:00 – 17:00')
-  document.getElementById('fTimeSlot').value = val
+function selectFlavor(val, el) {
+  document.querySelectorAll('#flavorGrid .flavor-card').forEach(c => c.classList.remove('selected'))
+  el.classList.add('selected')
+  document.getElementById('fFlavor').value = val
 }
 
 function selectCakeSize(label, price, el) {
@@ -1081,41 +706,27 @@ function selectCakeSize(label, price, el) {
   document.getElementById('fCakeSize').value = label
   document.getElementById('fCakeSizePrice').value = price
   document.getElementById('previewCakePrice').textContent = 'NT$ ' + price.toLocaleString()
-  updateTotal()
+  updateOrderTotal()
 }
 
-function selectFlavor(val, el) {
-  document.querySelectorAll('#flavorChips .option-chip').forEach(c => c.classList.remove('selected'))
-  el.classList.add('selected')
-  document.getElementById('fFlavor').value = val
-}
-
-function selectDeco1(val, el) {
-  document.querySelectorAll('#deco1Chips .option-chip').forEach(c => c.classList.remove('selected'))
-  el.classList.add('selected')
-  document.getElementById('fDeco1').value = val
-  document.getElementById('deco1CustomGroup').style.display = val === '不需要' ? 'none' : 'block'
-}
-
-function selectDeco2(val, el) {
+function selectDeco2(label, price, el) {
   document.querySelectorAll('#deco2Chips .option-chip').forEach(c => c.classList.remove('selected'))
   el.classList.add('selected')
-  document.getElementById('fDeco2').value = val
-  // 解析配件費用
-  const match = val.match(/NT\$(\d+)/)
-  const decoPrice = match ? parseInt(match[1]) : 0
-  document.getElementById('decoRow').style.display = decoPrice > 0 ? 'flex' : 'none'
-  document.getElementById('previewDecoPrice').textContent = decoPrice > 0 ? 'NT$ ' + decoPrice : '—'
-  updateTotal()
+  document.getElementById('fDeco2').value = label
+  document.getElementById('fDeco2Price').value = price
+  document.getElementById('decoFeeRow').style.display = price > 0 ? 'flex' : 'none'
+  document.getElementById('previewDecoPrice').textContent = 'NT$ ' + price
+  updateOrderTotal()
 }
 
-function selectBag(val, price, el) {
-  document.querySelectorAll('.option-chip[id^="bag-"]').forEach(c => c.classList.remove('selected'))
+function selectBag(label, price, el) {
+  document.querySelectorAll('#orderFormWrap .option-chip[id^="bag-"]').forEach(c => c.classList.remove('selected'))
   el.classList.add('selected')
-  document.getElementById('fBag').value = val
+  document.getElementById('fBag').value = label
   document.getElementById('fBagPrice').value = price
-  document.getElementById('bagRow').style.display = price > 0 ? 'flex' : 'none'
-  updateTotal()
+  document.getElementById('bagFeeRow').style.display = price > 0 ? 'flex' : 'none'
+  document.getElementById('previewBagPrice').textContent = 'NT$ ' + price
+  updateOrderTotal()
 }
 
 function selectDelivery(v) {
@@ -1123,33 +734,23 @@ function selectDelivery(v) {
   document.getElementById('opt-pickup').classList.toggle('selected', v==='pickup')
   document.getElementById('opt-delivery').classList.toggle('selected', v==='delivery')
   document.getElementById('deliveryAddressGroup').style.display = v==='delivery' ? 'block' : 'none'
-  document.getElementById('deliveryRow').style.display = v==='delivery' ? 'flex' : 'none'
-  updateTotal()
+  document.getElementById('deliveryFeeRow').style.display = v==='delivery' ? 'flex' : 'none'
+  updateOrderTotal()
 }
 
-function selectPayment(v) {
-  selectedPayment = v
-}
-
-function updateTotal() {
-  const cakePrice = parseInt(document.getElementById('fCakeSizePrice')?.value || 0)
-  const bagPrice = parseInt(document.getElementById('fBagPrice')?.value || 0)
-  const fee = selectedDelivery === 'delivery' ? DELIVERY_FEE : 0
-  // 配件費用
-  const deco2 = document.getElementById('fDeco2')?.value || ''
-  const decoMatch = deco2.match(/NT\$(\d+)/)
-  const decoPrice = decoMatch ? parseInt(decoMatch[1]) : 0
-  const total = cakePrice + bagPrice + fee + decoPrice
+function updateOrderTotal() {
+  const cake = parseInt(document.getElementById('fCakeSizePrice')?.value || 0)
+  const deco = parseInt(document.getElementById('fDeco2Price')?.value || 0)
+  const bag = parseInt(document.getElementById('fBagPrice')?.value || 0)
+  const delivery = selectedDelivery === 'delivery' ? DELIVERY_FEE : 0
+  const total = cake + deco + bag + delivery
   const el = document.getElementById('totalAmount')
-  if (el) el.textContent = cakePrice > 0 ? 'NT$ ' + total.toLocaleString() : 'NT$ —'
+  if (el) el.textContent = cake > 0 ? 'NT$ ' + total.toLocaleString() : 'NT$ —'
 }
 
-function removeCartItem(idx) {
-  cart.splice(idx, 1)
-  updateCartCount()
-  renderCart()
-}
-
+// ══════════════════════════════════════════
+// SUBMIT ORDER
+// ══════════════════════════════════════════
 async function submitOrder() {
   const name = document.getElementById('fName')?.value.trim()
   const ig = document.getElementById('fIg')?.value.trim()
@@ -1159,6 +760,7 @@ async function submitOrder() {
   const cakeSize = document.getElementById('fCakeSize')?.value
   const flavor = document.getElementById('fFlavor')?.value
   const deco1 = document.getElementById('fDeco1')?.value
+  const deco1Custom = document.getElementById('fDeco1Custom')?.value.trim()
   const deco2 = document.getElementById('fDeco2')?.value
   const bag = document.getElementById('fBag')?.value || '不需要'
   const last5 = document.getElementById('fLast5')?.value.trim()
@@ -1177,12 +779,11 @@ async function submitOrder() {
   if (selectedDelivery === 'delivery' && !address) { toast('請填寫收件地址', 'error'); return }
   if (!last5) { toast('請填寫帳號末五碼', 'error'); return }
 
-  const cakePrice = parseInt(document.getElementById('fCakeSizePrice')?.value || 0)
+  const cake = parseInt(document.getElementById('fCakeSizePrice')?.value || 0)
+  const deco2price = parseInt(document.getElementById('fDeco2Price')?.value || 0)
   const bagPrice = parseInt(document.getElementById('fBagPrice')?.value || 0)
-  const fee = selectedDelivery === 'delivery' ? DELIVERY_FEE : 0
-  const decoMatch = deco2.match(/NT\$(\d+)/)
-  const decoPrice = decoMatch ? parseInt(decoMatch[1]) : 0
-  const total = cakePrice + bagPrice + fee + decoPrice
+  const deliveryFee = selectedDelivery === 'delivery' ? DELIVERY_FEE : 0
+  const total = cake + deco2price + bagPrice + deliveryFee
 
   const noteAll = [
     `IG：${ig}`,
@@ -1190,43 +791,24 @@ async function submitOrder() {
     `取貨時段：${timeSlot}`,
     `蛋糕尺寸：${cakeSize}`,
     `口味：${flavor}`,
-    `配件一：${deco1}`,
-    `配件二：${deco2 || '不需要'}`,
+    `配件一：${deco1}${deco1Custom ? '（' + deco1Custom + '）' : ''}`,
+    `配件二：${deco2}`,
     `保冷袋：${bag}`,
     address ? `地址：${address}` : '',
     note ? `備註：${note}` : ''
   ].filter(Boolean).join('\n')
 
-  const btn = document.querySelector('#checkoutForm .btn-primary')
+  const btn = document.querySelector('#orderFormWrap .btn-primary')
   btn.disabled = true; btn.textContent = '送出中...'
 
   try {
     const { data: order, error: oErr } = await sb.from('orders').insert({
-      customer_name: name,
-      customer_phone: phone,
-      delivery_method: selectedDelivery,
-      delivery_fee: fee,
-      total_amount: total,
-      payment_method: 'transfer',
-      transfer_last5: last5,
-      note: noteAll
+      customer_name: name, customer_phone: phone,
+      delivery_method: selectedDelivery, delivery_fee: deliveryFee,
+      total_amount: total, payment_method: 'transfer',
+      transfer_last5: last5, note: noteAll
     }).select().single()
-
     if (oErr) throw oErr
-
-    // 若購物車有商品也一併寫入（蛋糕訂購模式下通常為空）
-    if (cart.length) {
-      const items = cart.map(item => ({
-        order_id: order.id,
-        product_id: item.productId,
-        product_name: item.productName,
-        quantity: item.quantity,
-        unit_price: item.unitPrice,
-        selected_options: {options: item.selectedOptions, addons: item.addons},
-        subtotal: item.subtotal
-      }))
-      await sb.from('order_items').insert(items)
-    }
 
     cart = []
     updateCartCount()
@@ -1238,92 +820,126 @@ async function submitOrder() {
   }
 }
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
+// PRODUCT MODAL（商品瀏覽用）
+// ══════════════════════════════════════════
+function openProduct(id) {
+  const p = products.find(x => x.id === id)
+  if (!p) return
+  currentProduct = p
+  document.getElementById('modalContent').innerHTML = `
+    ${p.image_url ? `<img class="modal-img" src="${p.image_url}" alt="${p.name}">` : `<div class="modal-img-placeholder">🍰</div>`}
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">${p.name}</div>
+        <div class="modal-price">${p.description || ''}</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--text-muted);font-size:0.88rem;line-height:1.7">NT$ ${p.base_price} 起</p>
+      <div style="margin-top:1.5rem">
+        <button class="btn-primary" style="width:100%" onclick="closeModal();showPage('cart')">前往預訂 →</button>
+      </div>
+    </div>`
+  document.getElementById('productModal').classList.add('open')
+  document.body.style.overflow = 'hidden'
+}
+
+function closeModal() {
+  document.getElementById('productModal').classList.remove('open')
+  document.body.style.overflow = ''
+}
+function closeProductModal(e) {
+  if (e.target === document.getElementById('productModal')) closeModal()
+}
+function updateCartCount() {
+  document.getElementById('cartCountHeader').textContent = cart.reduce((s,i) => s + i.quantity, 0)
+}
+
+// ══════════════════════════════════════════
 // ADMIN AUTH
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 function doAdminLogin() {
-  const pw = document.getElementById('adminPwInput').value
-  if (pw === ADMIN_PASSWORD) {
+  if (document.getElementById('adminPwInput').value === ADMIN_PASSWORD) {
     adminAuthed = true
     document.getElementById('adminLogin').style.display = 'none'
     document.getElementById('adminDash').style.display = 'block'
-    loadOrders()
-    loadAdminProducts()
+    loadOrders(); loadAdminProducts(); loadFormSettingsAdmin()
   } else {
     document.getElementById('adminLoginError').textContent = '密碼錯誤，請再試一次。'
   }
 }
-
 function adminLogout() {
   adminAuthed = false
   document.getElementById('adminLogin').style.display = 'flex'
   document.getElementById('adminDash').style.display = 'none'
   document.getElementById('adminPwInput').value = ''
 }
-
 function switchAdminTab(tab, el) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'))
   el.classList.add('active')
-  document.getElementById('adminTabOrders').style.display = tab === 'orders' ? 'block' : 'none'
-  document.getElementById('adminTabProducts').style.display = tab === 'products' ? 'block' : 'none'
+  document.getElementById('adminTabOrders').style.display = tab==='orders' ? 'block' : 'none'
+  document.getElementById('adminTabForm').style.display = tab==='form' ? 'block' : 'none'
+  document.getElementById('adminTabProducts').style.display = tab==='products' ? 'block' : 'none'
 }
 
-// ════════════════════════════════════════
+// ══════════════════════════════════════════
 // ADMIN ORDERS
-// ════════════════════════════════════════
-let allOrders = []
-
+// ══════════════════════════════════════════
 async function loadOrders() {
-  const { data, error } = await sb.from('orders').select('*, order_items(*)').order('created_at', {ascending: false})
-  if (error) { toast('載入訂單失敗', 'error'); return }
+  const { data } = await sb.from('orders').select('*').order('created_at', {ascending: false})
   allOrders = data || []
   const tbody = document.getElementById('ordersBody')
-  if (!allOrders.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--text-muted);padding:3rem">尚無訂單</td></tr>'
-    return
-  }
-  tbody.innerHTML = allOrders.map(o => `
-    <tr>
-      <td style="font-size:0.75rem;color:var(--text-muted)">${o.id.slice(0,8).toUpperCase()}</td>
-      <td style="white-space:nowrap">${new Date(o.created_at).toLocaleString('zh-TW',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
+  if (!allOrders.length) { tbody.innerHTML = '<tr><td colspan="18" style="text-align:center;color:var(--text-muted);padding:3rem">尚無訂單</td></tr>'; return }
+  tbody.innerHTML = allOrders.map(o => {
+    const n = o.note || ''
+    const get = (key) => { const m = n.match(new RegExp(key + '：([^\n]+)')); return m ? m[1] : '—' }
+    return `<tr>
+      <td style="font-size:0.72rem;color:var(--text-muted)">${o.id.slice(0,8).toUpperCase()}</td>
+      <td style="white-space:nowrap;font-size:0.78rem">${new Date(o.created_at).toLocaleString('zh-TW',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
       <td>${o.customer_name}</td>
+      <td style="font-size:0.78rem">${get('IG')}</td>
       <td>${o.customer_phone}</td>
-      <td>${o.delivery_method === 'pickup' ? '面交' : '宅配'}</td>
-      <td>${o.payment_method === 'transfer' ? '匯款' : '貨到付款'}</td>
-      <td>${o.transfer_last5 || '—'}</td>
+      <td style="white-space:nowrap">${get('取貨日期')}</td>
+      <td style="white-space:nowrap">${get('取貨時段')}</td>
+      <td>${o.delivery_method==='pickup'?'面交':'宅配'}</td>
+      <td style="font-size:0.78rem">${get('蛋糕尺寸')}</td>
+      <td style="font-size:0.78rem">${get('口味')}</td>
+      <td style="font-size:0.78rem">${get('配件一')}</td>
+      <td style="font-size:0.78rem">${get('配件二')}</td>
+      <td style="font-size:0.78rem">${get('保冷袋')}</td>
+      <td>${o.transfer_last5||'—'}</td>
       <td>NT$ ${o.total_amount.toLocaleString()}</td>
-      <td style="max-width:160px;font-size:0.78rem">${o.note || '—'}</td>
+      <td style="max-width:120px;font-size:0.75rem">${get('備註')}</td>
       <td><span class="badge ${o.status==='done'?'done':'pending'}">${o.status==='done'?'完成':'待確認'}</span></td>
-      <td style="white-space:nowrap">
-        ${o.status !== 'done'
-          ? `<button class="btn-sm green" onclick="markDone('${o.id}')">標記完成</button>`
-          : `<span style="font-size:0.75rem;color:var(--text-muted)">已完成</span>`}
-      </td>
-    </tr>
-  `).join('')
+      <td>${o.status!=='done' ? `<button class="btn-sm green" onclick="markDone('${o.id}')">完成</button>` : '—'}</td>
+    </tr>`
+  }).join('')
 }
 
 async function markDone(id) {
   await sb.from('orders').update({status:'done'}).eq('id', id)
-  toast('已標記完成', 'success')
-  loadOrders()
+  toast('已標記完成', 'success'); loadOrders()
 }
 
 function exportOrders() {
   if (!allOrders.length) { toast('沒有訂單可匯出'); return }
-  const rows = allOrders.map(o => ({
-    訂單編號: o.id.slice(0,8).toUpperCase(),
-    時間: new Date(o.created_at).toLocaleString('zh-TW'),
-    姓名: o.customer_name,
-    電話: o.customer_phone,
-    取貨方式: o.delivery_method === 'pickup' ? '面交' : '黑貓宅配',
-    付款方式: o.payment_method === 'transfer' ? '銀行匯款' : '貨到付款',
-    帳號末五碼: o.transfer_last5 || '',
-    運費: o.delivery_fee,
-    總金額: o.total_amount,
-    備註: o.note || '',
-    狀態: o.status === 'done' ? '已完成' : '待確認'
-  }))
+  const rows = allOrders.map(o => {
+    const n = o.note || ''
+    const get = (key) => { const m = n.match(new RegExp(key + '：([^\n]+)')); return m ? m[1] : '' }
+    return {
+      訂單編號: o.id.slice(0,8).toUpperCase(),
+      時間: new Date(o.created_at).toLocaleString('zh-TW'),
+      姓名: o.customer_name, 電話: o.customer_phone,
+      IG帳號: get('IG'), 取貨日期: get('取貨日期'), 取貨時段: get('取貨時段'),
+      取貨方式: o.delivery_method==='pickup'?'面交':'宅配',
+      蛋糕尺寸: get('蛋糕尺寸'), 口味: get('口味'),
+      配件一: get('配件一'), 配件二: get('配件二'), 保冷袋: get('保冷袋'),
+      帳號末五碼: o.transfer_last5||'', 運費: o.delivery_fee, 總金額: o.total_amount,
+      備註: get('備註'), 狀態: o.status==='done'?'已完成':'待確認'
+    }
+  })
   const ws = XLSX.utils.json_to_sheet(rows)
   const wb = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(wb, ws, '訂單')
@@ -1331,233 +947,220 @@ function exportOrders() {
   toast('匯出成功 ✓', 'success')
 }
 
-// ════════════════════════════════════════
-// ADMIN PRODUCTS
-// ════════════════════════════════════════
-let adminProducts = []
+// ══════════════════════════════════════════
+// ADMIN FORM SETTINGS
+// ══════════════════════════════════════════
+let localSettings = {}
 
+async function loadFormSettingsAdmin() {
+  const { data } = await sb.from('form_settings').select('*')
+  if (!data) return
+  data.forEach(row => { localSettings[row.id] = JSON.parse(JSON.stringify(row.value)) })
+  renderFormSettingsPanel()
+}
+
+function renderFormSettingsPanel() {
+  const s = localSettings
+  const pickupDates = s['pickup_dates'] || []
+  const timeSlots = s['time_slots'] || []
+  const cakeSizes = s['cake_sizes'] || []
+  const flavors = s['flavors'] || []
+  const deco1 = s['deco1_options'] || []
+  const deco2 = s['deco2_options'] || []
+  const bagPrice = s['bag_price'] || 30
+  const isOpen = s['form_open'] !== false && s['form_open'] !== 'false'
+  const notice = s['form_notice'] || ''
+
+  document.getElementById('formSettingsPanel').innerHTML = `
+    <div class="settings-grid">
+
+      <!-- 開關接單 -->
+      <div class="settings-card">
+        <h3>接單開關</h3>
+        <div class="toggle-wrap">
+          <label class="toggle">
+            <input type="checkbox" id="settingFormOpen" ${isOpen?'checked':''} onchange="updateSimpleSetting('form_open', this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label" id="formOpenLabel">${isOpen ? '✅ 目前開放接單' : '🔴 目前暫停接單'}</span>
+        </div>
+        <div class="form-group" style="margin-top:1rem;margin-bottom:0">
+          <label class="form-label">公告文字</label>
+          <input class="form-input" id="settingNotice" value="${notice}" placeholder="例：目前開放 7 月份訂單">
+          <button class="btn-sm primary" style="margin-top:0.5rem;width:100%" onclick="saveNotice()">儲存公告</button>
+        </div>
+      </div>
+
+      <!-- 取貨日期 -->
+      <div class="settings-card">
+        <h3>取貨日期</h3>
+        <div class="settings-tag-wrap" id="tags-pickup_dates">
+          ${pickupDates.map((d,i) => `<span class="settings-tag">${d}<button onclick="removeTag('pickup_dates',${i})">✕</button></span>`).join('')}
+        </div>
+        <div class="settings-add-row">
+          <input id="new-pickup_dates" placeholder="例：7/12（六）">
+          <button class="btn-sm primary" onclick="addTag('pickup_dates')">＋ 新增</button>
+        </div>
+        <button class="btn-sm green" style="margin-top:0.8rem;width:100%" onclick="saveSetting('pickup_dates')">儲存日期</button>
+      </div>
+
+      <!-- 取貨時段 -->
+      <div class="settings-card">
+        <h3>取貨時段</h3>
+        <div class="settings-tag-wrap" id="tags-time_slots">
+          ${timeSlots.map((t,i) => `<span class="settings-tag">${t}<button onclick="removeTag('time_slots',${i})">✕</button></span>`).join('')}
+        </div>
+        <div class="settings-add-row">
+          <input id="new-time_slots" placeholder="例：16:00 – 18:00">
+          <button class="btn-sm primary" onclick="addTag('time_slots')">＋ 新增</button>
+        </div>
+        <button class="btn-sm green" style="margin-top:0.8rem;width:100%" onclick="saveSetting('time_slots')">儲存時段</button>
+      </div>
+
+      <!-- 蛋糕尺寸 -->
+      <div class="settings-card">
+        <h3>蛋糕尺寸與價格</h3>
+        <div id="sizes-list">
+          ${cakeSizes.map((s,i) => `
+            <div class="option-row" style="padding:0.4rem 0">
+              <input placeholder="尺寸名稱" value="${s.label}" oninput="localSettings['cake_sizes'][${i}].label=this.value">
+              <input type="number" placeholder="價格" value="${s.price}" style="max-width:90px" oninput="localSettings['cake_sizes'][${i}].price=Number(this.value)">
+              <button class="option-row-del" onclick="removeCakeSize(${i})">✕</button>
+            </div>`).join('')}
+        </div>
+        <button class="btn-sm outline" style="margin-top:0.5rem" onclick="addCakeSize()">＋ 新增尺寸</button>
+        <button class="btn-sm green" style="margin-top:0.5rem;width:100%" onclick="saveSetting('cake_sizes')">儲存尺寸</button>
+      </div>
+
+      <!-- 口味 -->
+      <div class="settings-card">
+        <h3>蛋糕口味</h3>
+        <div class="settings-tag-wrap" id="tags-flavors">
+          ${flavors.map((f,i) => `<span class="settings-tag">${f.name}<button onclick="removeFlavorTag(${i})">✕</button></span>`).join('')}
+        </div>
+        <div class="settings-add-row">
+          <input id="new-flavor" placeholder="口味名稱">
+          <button class="btn-sm primary" onclick="addFlavorTag()">＋ 新增</button>
+        </div>
+        <button class="btn-sm green" style="margin-top:0.8rem;width:100%" onclick="saveSetting('flavors')">儲存口味</button>
+      </div>
+
+      <!-- 配件一 -->
+      <div class="settings-card">
+        <h3>配件一（文字牌）</h3>
+        <div class="settings-tag-wrap" id="tags-deco1_options">
+          ${deco1.map((d,i) => `<span class="settings-tag">${d}<button onclick="removeTag('deco1_options',${i})">✕</button></span>`).join('')}
+        </div>
+        <div class="settings-add-row">
+          <input id="new-deco1_options" placeholder="例：生日快樂">
+          <button class="btn-sm primary" onclick="addTag('deco1_options')">＋ 新增</button>
+        </div>
+        <button class="btn-sm green" style="margin-top:0.8rem;width:100%" onclick="saveSetting('deco1_options')">儲存配件一</button>
+      </div>
+
+      <!-- 配件二 -->
+      <div class="settings-card">
+        <h3>配件二（花束選項）</h3>
+        <div id="deco2-list">
+          ${deco2.map((d,i) => `
+            <div class="option-row" style="padding:0.4rem 0">
+              <input placeholder="選項名稱" value="${d.label}" oninput="localSettings['deco2_options'][${i}].label=this.value">
+              <input type="number" placeholder="加價" value="${d.price}" style="max-width:80px" oninput="localSettings['deco2_options'][${i}].price=Number(this.value)">
+              <button class="option-row-del" onclick="removeDeco2(${i})">✕</button>
+            </div>`).join('')}
+        </div>
+        <button class="btn-sm outline" style="margin-top:0.5rem" onclick="addDeco2()">＋ 新增選項</button>
+        <button class="btn-sm green" style="margin-top:0.5rem;width:100%" onclick="saveSetting('deco2_options')">儲存配件二</button>
+      </div>
+
+      <!-- 保冷袋 -->
+      <div class="settings-card">
+        <h3>保冷袋加購價格</h3>
+        <div class="form-group">
+          <label class="form-label">價格（元）</label>
+          <input class="form-input" type="number" id="settingBagPrice" value="${bagPrice}">
+        </div>
+        <button class="btn-sm green" style="width:100%" onclick="saveBagPrice()">儲存保冷袋價格</button>
+      </div>
+
+    </div>`
+}
+
+// ── Settings helpers ──
+function removeTag(key, i) {
+  localSettings[key].splice(i, 1)
+  renderFormSettingsPanel()
+}
+function addTag(key) {
+  const val = document.getElementById('new-' + key).value.trim()
+  if (!val) { toast('請輸入內容', 'error'); return }
+  if (!localSettings[key]) localSettings[key] = []
+  localSettings[key].push(val)
+  renderFormSettingsPanel()
+}
+function removeFlavorTag(i) {
+  localSettings['flavors'].splice(i, 1)
+  renderFormSettingsPanel()
+}
+function addFlavorTag() {
+  const val = document.getElementById('new-flavor').value.trim()
+  if (!val) { toast('請輸入口味名稱', 'error'); return }
+  if (!localSettings['flavors']) localSettings['flavors'] = []
+  localSettings['flavors'].push({name: val, image_url: ''})
+  renderFormSettingsPanel()
+}
+function addCakeSize() {
+  localSettings['cake_sizes'].push({label:'', price:0})
+  renderFormSettingsPanel()
+}
+function removeCakeSize(i) {
+  localSettings['cake_sizes'].splice(i, 1)
+  renderFormSettingsPanel()
+}
+function addDeco2() {
+  localSettings['deco2_options'].push({label:'', price:0})
+  renderFormSettingsPanel()
+}
+function removeDeco2(i) {
+  localSettings['deco2_options'].splice(i, 1)
+  renderFormSettingsPanel()
+}
+async function saveSetting(key) {
+  const { error } = await sb.from('form_settings').upsert({id: key, value: localSettings[key], updated_at: new Date().toISOString()})
+  if (error) { toast('儲存失敗', 'error'); return }
+  formSettings[key] = localSettings[key]
+  toast('已儲存 ✓', 'success')
+}
+async function updateSimpleSetting(key, val) {
+  const { error } = await sb.from('form_settings').upsert({id: key, value: val, updated_at: new Date().toISOString()})
+  if (!error) {
+    formSettings[key] = val
+    document.getElementById('formOpenLabel').textContent = val ? '✅ 目前開放接單' : '🔴 目前暫停接單'
+    toast(val ? '已開放接單' : '已暫停接單', 'success')
+  }
+}
+async function saveNotice() {
+  const val = document.getElementById('settingNotice').value.trim()
+  const { error } = await sb.from('form_settings').upsert({id: 'form_notice', value: val, updated_at: new Date().toISOString()})
+  if (!error) { formSettings['form_notice'] = val; toast('公告已儲存 ✓', 'success') }
+}
+async function saveBagPrice() {
+  const val = parseInt(document.getElementById('settingBagPrice').value)
+  const { error } = await sb.from('form_settings').upsert({id: 'bag_price', value: val, updated_at: new Date().toISOString()})
+  if (!error) { formSettings['bag_price'] = val; toast('保冷袋價格已儲存 ✓', 'success') }
+}
+
+// ══════════════════════════════════════════
+// ADMIN PRODUCTS
+// ══════════════════════════════════════════
 async function loadAdminProducts() {
   const { data } = await sb.from('products').select('*').order('created_at')
   adminProducts = data || []
   renderAdminProducts()
 }
-
 function renderAdminProducts() {
   document.getElementById('adminProductsGrid').innerHTML = adminProducts.map(p => `
     <div class="product-admin-card">
-      ${p.image_url
-        ? `<img class="product-admin-img" src="${p.image_url}" alt="${p.name}">`
-        : `<div class="product-admin-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--cream-border)">🍰</div>`}
+      ${p.image_url ? `<img class="product-admin-img" src="${p.image_url}" alt="${p.name}">` : `<div class="product-admin-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--cream-border)">🍰</div>`}
       <div class="product-admin-body">
-        <div class="product-admin-name">${p.name}</div>
-        <div class="product-admin-price">NT$ ${p.base_price} 起 ｜ <span class="badge ${p.is_active?'active':'inactive'}">${p.is_active?'上架中':'已下架'}</span></div>
-        <div class="product-admin-actions">
-          <button class="btn-sm outline" onclick="openProductEdit('${p.id}')">編輯</button>
-          <button class="btn-sm ${p.is_active?'red':'green'}" onclick="toggleProduct('${p.id}',${!p.is_active})">${p.is_active?'下架':'上架'}</button>
-        </div>
-      </div>
-    </div>
-  `).join('')
-}
-
-async function toggleProduct(id, active) {
-  await sb.from('products').update({is_active: active}).eq('id', id)
-  toast(active ? '已上架' : '已下架', 'success')
-  loadAdminProducts()
-}
-
-// ════════════════════════════════════════
-// PRODUCT EDIT MODAL
-// ════════════════════════════════════════
-let editingProduct = null
-let editOptions = { sizes: [], flavors: [], styles: [], addons: [] }
-let newImageFile = null
-let newImagePreview = null
-
-function openProductEdit(id) {
-  editingProduct = id ? adminProducts.find(p => p.id === id) : null
-  newImageFile = null
-  newImagePreview = null
-
-  if (editingProduct) {
-    const o = editingProduct.options || {}
-    editOptions = {
-      sizes: (o.sizes || []).map(x => ({...x})),
-      flavors: (o.flavors || []).map(x => ({...x})),
-      styles: (o.styles || []).map(x => ({...x})),
-      addons: (o.addons || []).map(x => ({...x}))
-    }
-  } else {
-    editOptions = { sizes: [], flavors: [], styles: [], addons: [] }
-  }
-
-  renderEditModal()
-  document.getElementById('editModalOverlay').classList.add('open')
-  document.body.style.overflow = 'hidden'
-}
-
-function renderEditModal() {
-  const p = editingProduct
-  document.getElementById('editModalContent').innerHTML = `
-    <div class="edit-modal-header">
-      <h3>${p ? '編輯商品' : '新增商品'}</h3>
-      <button class="modal-close" onclick="closeEditModal()">✕</button>
-    </div>
-    <div class="edit-modal-body">
-      <!-- Image -->
-      <div class="form-group">
-        <label class="form-label">商品照片（自動壓縮至 WebP）</label>
-        <div class="img-upload-area" id="uploadArea" onclick="document.getElementById('imgFileInput').click()">
-          ${newImagePreview || (p?.image_url)
-            ? `<img class="img-preview" id="imgPreview" src="${newImagePreview || p?.image_url}">`
-            : `<p>點擊上傳照片<br><span style="font-size:0.75rem;opacity:0.6">支援 JPG / PNG / HEIC</span></p>`}
-          <input type="file" id="imgFileInput" accept="image/*" onchange="handleImageUpload(event)" style="display:none">
-        </div>
-      </div>
-      <!-- Basic info -->
-      <div class="form-group">
-        <label class="form-label">商品名稱 *</label>
-        <input class="form-input" id="editName" value="${p?.name || ''}" placeholder="例：抹茶生乳捲">
-      </div>
-      <div class="form-group">
-        <label class="form-label">商品描述</label>
-        <input class="form-input" id="editDesc" value="${p?.description || ''}" placeholder="簡短描述">
-      </div>
-      <div class="form-group">
-        <label class="form-label">基本價格（元）*</label>
-        <input class="form-input" id="editPrice" type="number" value="${p?.base_price || ''}" placeholder="例：380">
-      </div>
-      <!-- Options -->
-      ${['sizes','flavors','styles','addons'].map(type => `
-        <div class="form-group">
-          <div class="options-editor">
-            <div class="options-editor-header">
-              <span>${{sizes:'尺寸',flavors:'口味',styles:'樣式',addons:'加購選項'}[type]}</span>
-              <button class="btn-sm outline" onclick="addOptionRow('${type}')">＋ 新增</button>
-            </div>
-            <div id="opts-${type}">${renderOptionRows(type)}</div>
-          </div>
-        </div>`
-      ).join('')}
-    </div>
-    <div class="edit-modal-footer">
-      <button class="btn-outline" onclick="closeEditModal()">取消</button>
-      <button class="btn-primary" onclick="saveProduct()">儲存商品</button>
-    </div>
-  `
-}
-
-function renderOptionRows(type) {
-  return editOptions[type].map((o,i) => `
-    <div class="option-row" id="optrow-${type}-${i}">
-      <input placeholder="名稱" value="${o.name||''}" oninput="editOptions['${type}'][${i}].name=this.value">
-      <input placeholder="加價（0=免費）" type="number" value="${o.price||0}" style="max-width:130px" oninput="editOptions['${type}'][${i}].price=Number(this.value)">
-      <button class="option-row-del" onclick="removeOptionRow('${type}',${i})">✕</button>
-    </div>
-  `).join('')
-}
-
-function addOptionRow(type) {
-  editOptions[type].push({name:'', price:0})
-  document.getElementById('opts-'+type).innerHTML = renderOptionRows(type)
-}
-
-function removeOptionRow(type, i) {
-  editOptions[type].splice(i, 1)
-  document.getElementById('opts-'+type).innerHTML = renderOptionRows(type)
-}
-
-// Image compression → WebP
-async function handleImageUpload(e) {
-  const file = e.target.files[0]
-  if (!file) return
-  toast('壓縮圖片中...')
-  try {
-    const compressed = await compressToWebP(file, 800, 0.82)
-    newImageFile = compressed
-    newImagePreview = URL.createObjectURL(compressed)
-    const uploadArea = document.getElementById('uploadArea')
-    uploadArea.innerHTML = `<img class="img-preview" id="imgPreview" src="${newImagePreview}"><input type="file" id="imgFileInput" accept="image/*" onchange="handleImageUpload(event)" style="display:none">`
-    toast('圖片已壓縮 ✓', 'success')
-  } catch(err) {
-    toast('圖片處理失敗', 'error')
-  }
-}
-
-function compressToWebP(file, maxSize, quality) {
-  return new Promise((res, rej) => {
-    const img = new Image()
-    const url = URL.createObjectURL(file)
-    img.onload = () => {
-      URL.revokeObjectURL(url)
-      let w = img.width, h = img.height
-      if (w > maxSize || h > maxSize) {
-        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize }
-        else { w = Math.round(w * maxSize / h); h = maxSize }
-      }
-      const canvas = document.createElement('canvas')
-      canvas.width = w; canvas.height = h
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-      canvas.toBlob(blob => blob ? res(blob) : rej(), 'image/webp', quality)
-    }
-    img.onerror = rej
-    img.src = url
-  })
-}
-
-async function saveProduct() {
-  const name = document.getElementById('editName').value.trim()
-  const desc = document.getElementById('editDesc').value.trim()
-  const price = parseInt(document.getElementById('editPrice').value)
-  if (!name || !price) { toast('請填寫商品名稱與價格', 'error'); return }
-
-  const btn = document.querySelector('.edit-modal-footer .btn-primary')
-  btn.disabled = true; btn.textContent = '儲存中...'
-
-  let imageUrl = editingProduct?.image_url || null
-
-  if (newImageFile) {
-    const ext = 'webp'
-    const path = `${Date.now()}.${ext}`
-    const { error: upErr } = await sb.storage.from('product-images').upload(path, newImageFile, {contentType:'image/webp', upsert:true})
-    if (upErr) { toast('圖片上傳失敗', 'error'); btn.disabled=false; btn.textContent='儲存商品'; return }
-    const { data: urlData } = sb.storage.from('product-images').getPublicUrl(path)
-    imageUrl = urlData.publicUrl
-  }
-
-  const payload = {
-    name, description: desc, base_price: price,
-    image_url: imageUrl,
-    options: editOptions
-  }
-
-  let error
-  if (editingProduct) {
-    ({ error } = await sb.from('products').update(payload).eq('id', editingProduct.id))
-  } else {
-    ({ error } = await sb.from('products').insert(payload))
-  }
-
-  if (error) { toast('儲存失敗：' + error.message, 'error'); btn.disabled=false; btn.textContent='儲存商品'; return }
-
-  toast('商品已儲存 ✓', 'success')
-  closeEditModal()
-  loadAdminProducts()
-}
-
-function closeEditModal(e) {
-  if (e && e.target !== document.getElementById('editModalOverlay')) return
-  document.getElementById('editModalOverlay').classList.remove('open')
-  document.body.style.overflow = ''
-}
-
-// ════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════
-checkAdminRoute()
-if (!window.location.hash.includes('admin')) {
-  loadProducts()
-}
-</script>
-</body>
-</html>
+        <div class="product-admin-name
